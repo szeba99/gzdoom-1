@@ -1307,38 +1307,6 @@ DEFINE_ACTION_FUNCTION(AActor, A_PrintToFile)
 	//-----------
 	return 0;
 }
-
-EXTERN_CVAR(Float, con_midtime)
-
-DEFINE_ACTION_FUNCTION(AActor, A_PrintToFile)
-{
-	PARAM_SELF_PROLOGUE(AActor);
-	PARAM_STRING_VAL(text);
-	PARAM_FLOAT	(time);
-	PARAM_NAME	(fontname);
-
-	if (text[0] == '$') text = GStrings(&text[1]);
-	if (self->CheckLocalView() ||
-		(self->target != NULL && self->target->CheckLocalView()))
-	{
-		float saved = con_midtime;
-		FFont *font = NULL;
-		
-		
-		if (fontname != NAME_None)
-		{
-			font = V_GetFont(fontname.GetChars());
-		}
-		if (time > 0)
-		{
-			con_midtime = float(time);
-		}
-		FString formatted = strbin1(text);
-		C_MidPrint(font, formatted.GetChars());
-		con_midtime = saved;
-	}
-	return 0;
-}
 ///===========================================================================
 //
 // A_Print
