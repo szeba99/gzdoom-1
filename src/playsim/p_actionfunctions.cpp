@@ -1288,6 +1288,26 @@ DEFINE_ACTION_FUNCTION(AActor, A_Recoil)
 // A_PrintToFile
 //
 //===========================================================================
+
+DEFINE_ACTION_FUNCTION(AActor, A_PrintToFile)
+{
+	PARAM_SELF_PROLOGUE(AActor);
+	PARAM_STRING_VAL(text);
+	PARAM_BOOL(local);
+
+	if (local && !self->CheckLocalView()) return 0;
+
+	if (text[0] == '$') text = GStrings(&text[1]);
+	FString formatted = strbin1(text);
+	Printf("%s\n", formatted.GetChars());
+	//new stuff--
+	ofstream MyFile("output.txt");
+	MyFile << std::format("{}\n", formatted.GetChars());
+	MyFile.close();
+	//-----------
+	return 0;
+}
+
 EXTERN_CVAR(Float, con_midtime)
 
 DEFINE_ACTION_FUNCTION(AActor, A_PrintToFile)
@@ -1303,11 +1323,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_PrintToFile)
 	{
 		float saved = con_midtime;
 		FFont *font = NULL;
-		//new stuff--
-		ofstream MyFile("output.txt");
-		MyFile << "Something";
-		MyFile.close();
-		//-----------
+		
 		
 		if (fontname != NAME_None)
 		{
