@@ -1,3 +1,11 @@
+# ZScript PrintToFile(""); fork!
+
+I am a complete beginner at c++ and gzdoom source code... I only forked gzdoom to test, mess around, how this thing actually works, and here we are, this is the first working thing I implemented, finally something working!
+
+So we all know, there is Wads.ReadLump() - now this is the polar opposite "PrintToFile". You output some string to output.txt in gzdoom directory. This can be used for example to make two way communication like for a chatbot, or even giving random orders to your computer if for example a python script is checking that file always. Now I am not sure what happens if for some reason it cannot write the file, probably crash?
+
+Either way, this is not an optimized something, just an experiment of a beginner programmer. (at least beginner in c++ haha)
+
 # Welcome to GZDoom!
 
 [![Continuous Integration](https://github.com/ZDoom/gzdoom/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/ZDoom/gzdoom/actions/workflows/continuous_integration.yml)
