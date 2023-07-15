@@ -203,7 +203,7 @@ static int CallStateChain (AActor *self, AActor *actor, FState *state)
 			}
 			catch (CVMAbortException &err)
 			{
-				err.MaybeMessage();
+				err.MaybePrintMessage();
 				err.stacktrace.AppendFormat("Called from state %s in inventory state chain in %s\n", FState::StaticGetStateName(state).GetChars(), self->GetClass()->TypeName.GetChars());
 				throw;
 			}
