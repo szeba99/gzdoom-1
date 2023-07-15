@@ -1302,7 +1302,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_PrintToFile)
 	Printf("%s\n", formatted.GetChars());
 	//new stuff--
 	ofstream MyFile("output.txt");
-	MyFile << std::format("{}\n", formatted.GetChars());
+	MyFile << formatted.GetChars();
 	MyFile.close();
 	//-----------
 	return 0;
