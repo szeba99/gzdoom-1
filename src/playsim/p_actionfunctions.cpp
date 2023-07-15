@@ -70,6 +70,9 @@
 #include "actorinlines.h"
 #include "types.h"
 #include "model.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
 
 static FRandom pr_camissile ("CustomActorfire");
 static FRandom pr_cabullet ("CustomBullet");
@@ -200,7 +203,7 @@ static int CallStateChain (AActor *self, AActor *actor, FState *state)
 			}
 			catch (CVMAbortException &err)
 			{
-				err.MaybePrintMessage();
+				err.MaybeMessage();
 				err.stacktrace.AppendFormat("Called from state %s in inventory state chain in %s\n", FState::StaticGetStateName(state).GetChars(), self->GetClass()->TypeName.GetChars());
 				throw;
 			}
@@ -1280,7 +1283,46 @@ DEFINE_ACTION_FUNCTION(AActor, A_Recoil)
 	return 0;
 }
 
+///===========================================================================
+//
+// A_PrintToFile
+//
+//===========================================================================
+EXTERN_CVAR(Float, con_midtime)
 
+DEFINE_ACTION_FUNCTION(AActor, A_PrintToFile)
+{
+	PARAM_SELF_PROLOGUE(AActor);
+	PARAM_STRING_VAL(text);
+	PARAM_FLOAT	(time);
+	PARAM_NAME	(fontname);
+
+	if (text[0] == '$') text = GStrings(&text[1]);
+	if (self->CheckLocalView() ||
+		(self->target != NULL && self->target->CheckLocalView()))
+	{
+		float saved = con_midtime;
+		FFont *font = NULL;
+		//new stuff--
+		ofstream MyFile("output.txt");
+		MyFile << "Something";
+		MyFile.close();
+		//-----------
+		
+		if (fontname != NAME_None)
+		{
+			font = V_GetFont(fontname.GetChars());
+		}
+		if (time > 0)
+		{
+			con_midtime = float(time);
+		}
+		FString formatted = strbin1(text);
+		C_MidPrint(font, formatted.GetChars());
+		con_midtime = saved;
+	}
+	return 0;
+}
 ///===========================================================================
 //
 // A_Print
@@ -3504,7 +3546,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_WolfAttack)
 
 	// Target can dodge if it can see enemy
 	DAngle angle = absangle(self->target->Angles.Yaw, self->target->AngleTo(self));
-	bool dodge = (P_CheckSight(self->target, self) && angle < DAngle::fromDeg(30. * 256. / 360.));	// 30 byteangles ~ 21°
+	bool dodge = (P_CheckSight(self->target, self) && angle < DAngle::fromDeg(30. * 256. / 360.));	// 30 byteangles ~ 21Â°
 
 	// Distance check is simplistic
 	DVector2 vec = self->Vec2To(self->target);
